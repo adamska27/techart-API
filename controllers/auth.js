@@ -10,15 +10,18 @@ module.exports = express
 		asyncMiddleware(async (req, res, next) => {
 			const { firstName, lastName, userName, email, password } = req.body;
 
-			const user = await User.create({
-				firstName,
-				lastName,
-				userName,
-				email,
-				password
-			});
-
-			res.status(200).send('user created');
+			try {
+				const user = await User.create({
+					firstName,
+					lastName,
+					userName,
+					email,
+					password
+				});
+				res.status(200).send('user created');
+			} catch (err) {
+				res.status(500).send(err.errors[0].message);
+			}
 		})
 	)
 	.post(
