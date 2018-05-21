@@ -10,7 +10,7 @@
   "author": "Adamska",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^2.0.0",
+    "bcrypt": "^2.0.1",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
