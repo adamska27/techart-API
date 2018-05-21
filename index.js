@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const port = process.env.PORT || 3005;
 
+if (!process.env.production) require('dotenv').config();
+
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());

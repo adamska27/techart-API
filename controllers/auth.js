@@ -18,9 +18,9 @@ module.exports = express
 					email,
 					password
 				});
-				res.status(200).send('user created');
+				res.status(200).send(user);
 			} catch (err) {
-				res.status(500).send(err.errors[0].message);
+				res.status(500).send(err);
 			}
 		})
 	)
@@ -33,14 +33,20 @@ module.exports = express
 			// throw an error if the email is not found
 			if (!user) res.status(401).json({ error: 'email not found' });
 			// verify the password entered with the password hashed in database
-			const passwordCheck = await user.validPassword(password);
-			const { id, username } = user.dataValues;
+			const authorized = await user.validPassword(password);
 
-			if (passwordCheck) {
-				const token = jwt.sign({ id, username, email }, 'secret', {
-					expiresIn: '3h'
-				});
+			if (authorized) {
+				const { id, userName } = user.dataValues;
+				const token = jwt.sign(
+					{ id, userName, email },
+					process.env.JWT_SECRET,
+					{
+						expiresIn: '3h'
+					}
+				);
 				res.json(token);
+			} else {
+				res.status(401).json({ error: 'invalid password' });
 			}
 		})
 	);
