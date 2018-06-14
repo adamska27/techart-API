@@ -34,4 +34,19 @@ const connexion = async () => {
 
 connexion();
 
+// Sync all defined models to the DB
+// pass { force: true } in sync parameter will drop the table if it already exists
+const sync = async () => {
+	try {
+		await sequelize.sync();
+		console.log(
+			'all tables has been successfully created, if one doesn\'t exist'
+		);
+	} catch (error) {
+		console.log('This error occured: ', error);
+	}
+};
+
+sync();
+
 module.exports = sequelize;
