@@ -1,18 +1,11 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
-const Product = require('./product');
+const Product = require('./product'),
+	User = require('./user');
 
 const Rating = sequelize.define(
 	'rating',
 	{
-		user_id: {
-			type: Sequelize.INTEGER,
-			allowNull: false
-		},
-		product_id: {
-			type: Sequelize.INTEGER,
-			allowNull: false
-		},
 		story: {
 			type: Sequelize.INTEGER,
 			allowNull: false
@@ -57,28 +50,27 @@ const Rating = sequelize.define(
 	{
 		hooks: {
 			beforeCreate: async rating => {
-				const checkProductAndUser = await Rating.findAll({
-					attributes: ['user_id', 'product_id'],
+				// check if product already exist
+				const checkProduct = await Product.findOne({
 					where: {
-						product_id: rating.product_id,
-						user_id: rating.user_id
+						id: rating.product_id
 					}
 				});
-
-				if (!checkProductAndUser.length) {
+				if (!checkProduct) {
 					try {
 						await Product.create({
 							id: rating.product_id
 						});
 					} catch (err) {
-						throw new Error('error during product creation');
+						console.log('err :', err);
 					}
-				} else {
-					throw new Error('Error already voted!');
 				}
 			}
 		}
 	}
 );
+
+User.belongsToMany(Product, { through: Rating, foreignKey: 'user_id' });
+Product.belongsToMany(User, { through: Rating, foreignKey: 'product_id' });
 
 module.exports = Rating;
