@@ -8,13 +8,21 @@ module.exports = express
 	.post(
 		'/register',
 		asyncMiddleware(async (req, res, next) => {
-			const { firstName, lastName, userName, email, password } = req.body;
+			const {
+				firstName,
+				lastName,
+				userName,
+				profilePicture,
+				email,
+				password
+			} = req.body;
 
 			try {
 				const user = await User.create({
 					firstName,
 					lastName,
 					userName,
+					profilePicture,
 					email,
 					password
 				});

@@ -26,6 +26,9 @@ const User = sequelize.define(
 			unique: true,
 			allowNull: false
 		},
+		profilePicture: {
+			type: Sequelize.STRING,
+		},
 		email: {
 			type: Sequelize.STRING,
 			unique: true,
