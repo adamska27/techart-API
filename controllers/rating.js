@@ -7,7 +7,6 @@ const { checkToken } = require('../auth/jwt');
 module.exports = express
 	.Router()
 	.post('/:productId', checkToken, async (req, res) => {
-		console.log('req: ', req.user);
 		const { productId } = req.params;
 		const {
 			story,

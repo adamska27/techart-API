@@ -24,14 +24,26 @@ module.exports = express
 			res.status(500).json({ error });
 		}
 	})
-	.get('/all', async (req, res) => {
+	.get('/best', async (req, res) => {
 		try {
-			const users = await User.findAll({
-				attributes: ['id', 'userName'],
-				limit: 1,
-				order: [['createdAt', 'DESC']]
-			});
-			res.status(200).send(users);
+			const userOfTheWeek = await sequelize
+				.query(
+					`SELECT COUNT(user_id), users."id", users."userName", users."profilePicture"
+				FROM ratings
+				INNER JOIN users
+				ON user_id = users.id
+				WHERE 
+				(ratings."createdAt" >= date_trunc('week', CURRENT_TIMESTAMP - interval '1 week')
+				AND ratings."createdAt" < date_trunc('week', CURRENT_TIMESTAMP))
+				GROUP BY users."id", users."userName", users."profilePicture"
+				ORDER BY count DESC
+				LIMIT 1
+				;`,
+					{ type: sequelize.QueryTypes.SELECT }
+				)
+				.then(userOfTheWeek => userOfTheWeek[0]);
+			console.log({ userOfTheWeek });
+			res.status(200).send(userOfTheWeek);
 		} catch (err) {
 			res.status(500).send(err);
 		}
@@ -39,7 +51,7 @@ module.exports = express
 	.get('/latest', async (req, res) => {
 		try {
 			const latestUsers = await User.findAll({
-				attributes: ['id', 'userName'],
+				attributes: ['id', 'profilePicture', 'userName'],
 				limit: 3,
 				order: [['createdAt', 'DESC']]
 			});
