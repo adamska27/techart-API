@@ -49,7 +49,7 @@ module.exports = express
 					{ id, userName, email },
 					process.env.JWT_SECRET,
 					{
-						expiresIn: '3h'
+						expiresIn: '24h'
 					}
 				);
 				res.json(token);

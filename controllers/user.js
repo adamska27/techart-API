@@ -42,8 +42,8 @@ module.exports = express
 					{ type: sequelize.QueryTypes.SELECT }
 				)
 				.then(userOfTheWeek => userOfTheWeek[0]);
-			console.log({ userOfTheWeek });
-			res.status(200).send(userOfTheWeek);
+			const result = userOfTheWeek ? userOfTheWeek : {};
+			res.status(200).send(result);
 		} catch (err) {
 			res.status(500).send(err);
 		}

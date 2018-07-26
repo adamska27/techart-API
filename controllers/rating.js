@@ -8,6 +8,8 @@ module.exports = express
 	.Router()
 	.post('/:productId', checkToken, async (req, res) => {
 		const { productId } = req.params;
+		const { ratings } = req.body;
+
 		const {
 			story,
 			feeling,
@@ -19,7 +21,7 @@ module.exports = express
 			framerate,
 			physics,
 			lighting
-		} = req.body;
+		} = ratings;
 
 		try {
 			await Rating.create({
@@ -36,9 +38,9 @@ module.exports = express
 				physics,
 				lighting
 			});
-			res.status(200).send('rating created');
+			res.status(200).json({ success: true, message: 'ratings added' });
 		} catch (err) {
-			res.status(500).send(err);
+			res.status(500).json({ success: false, err });
 		}
 	})
 	.get('/:productId', checkToken, async (req, res) => {
