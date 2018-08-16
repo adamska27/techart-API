@@ -14,8 +14,38 @@ module.exports = express
 				userName,
 				profilePicture,
 				email,
-				password
+				password,
+				gamerProfile
 			} = req.body;
+
+			if (!gamerProfile) {
+				try {
+					const user = await User.create({
+						firstName,
+						lastName,
+						userName,
+						profilePicture,
+						email,
+						password
+					});
+					res.status(200).send(user);
+				} catch (err) {
+					res.status(500).send(err);
+				}
+			}
+
+			const {
+				adventure,
+				action,
+				horror,
+				sport,
+				auto,
+				shooter,
+				str,
+				platform,
+				versus,
+				rpg
+			} = gamerProfile;
 
 			try {
 				const user = await User.create({
@@ -24,7 +54,17 @@ module.exports = express
 					userName,
 					profilePicture,
 					email,
-					password
+					password,
+					adventure,
+					action,
+					horror,
+					sport,
+					auto,
+					shooter,
+					str,
+					platform,
+					versus,
+					rpg
 				});
 				res.status(200).send(user);
 			} catch (err) {

@@ -11,11 +11,51 @@ module.exports = express
 		try {
 			const result = await User.findById(id, {
 				attributes: [
+					'id',
 					'firstName',
 					'lastName',
 					'userName',
 					'profilePicture',
-					'email'
+					'email',
+					'adventure',
+					'action',
+					'horror',
+					'sport',
+					'auto',
+					'shooter',
+					'str',
+					'platform',
+					'versus',
+					'rpg'
+				],
+				raw: true
+			});
+			res.status(200).send(result);
+		} catch (error) {
+			res.status(500).json({ error });
+		}
+	})
+	.get('/profile/:userId', async (req, res) => {
+		const { userId } = req.params;
+		try {
+			const result = await User.findById(userId, {
+				attributes: [
+					'id',
+					'firstName',
+					'lastName',
+					'userName',
+					'profilePicture',
+					'email',
+					'adventure',
+					'action',
+					'horror',
+					'sport',
+					'auto',
+					'shooter',
+					'str',
+					'platform',
+					'versus',
+					'rpg'
 				],
 				raw: true
 			});
@@ -65,7 +105,7 @@ module.exports = express
 			const { id } = req.user;
 			const collection = await sequelize
 				.query(
-					`SELECT products.name, products.artworks
+					`SELECT products.id, products.name, products.artworks
 					FROM ratings
 					INNER JOIN products 
 					ON product_id = products.id
