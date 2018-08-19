@@ -1,6 +1,6 @@
 const express = require('express'),
-	Rating = require('../models/rating');
-const sequelize = require('../config/db');
+	Rating = require('../models/rating'),
+	sequelize = require('../config/db');
 
 const { checkToken } = require('../auth/jwt');
 

@@ -7,6 +7,7 @@ module.exports = express
 		const { id } = req.params;
 		const {
 			artworks,
+			cover,
 			developers,
 			expansions,
 			franchises,
@@ -25,9 +26,11 @@ module.exports = express
 			themes,
 			videos
 		} = req.body;
+
 		try {
 			const result = await Product.create({
 				artworks,
+				cover,
 				developers,
 				expansions,
 				franchises,

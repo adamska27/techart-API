@@ -19,6 +19,9 @@ const Product = sequelize.define(
 		screenshots: {
 			type: Sequelize.ARRAY(Sequelize.JSON)
 		},
+		cover: {
+			type: Sequelize.JSON
+		},
 		storyline: {
 			type: Sequelize.TEXT
 		},
