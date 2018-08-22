@@ -28,3 +28,25 @@ exports.checkToken = (req, res, next) => {
 			.catch(err => res.json(err));
 	});
 };
+
+exports.checkTokenWithoutError = (req, res, next) => {
+	const token =
+		req.headers.authorization && extractBearerToken(req.headers.authorization);
+
+	if (token) {
+		jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+			if (err) res.status(401).json({ error: 'bad token' });
+			const { id } = decodedToken;
+
+			User.findById(id)
+				.then(user => {
+					if (!user) res.status('403').json({ error: 'Bad user' });
+					req.user = user;
+					next();
+				})
+				.catch(err => res.json(err));
+		});
+	} else {
+		next();
+	}
+};

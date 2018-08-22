@@ -99,7 +99,6 @@ module.exports = express
 			if (response.length) {
 				const values = Object.values(response[0]);
 				const formatedValues = values.map(x => Number(x).toFixed(1));
-				console.log({ formatedValues });
 				res.status(200).send(formatedValues);
 			} else {
 				res.status(200).send(noResponse);
